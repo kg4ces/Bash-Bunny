@@ -1,0 +1,1 @@
+The payload file is to roll defender back and shut it down, the Script is where the true payload goes.
